@@ -3,7 +3,7 @@ import React from "react";
 export const useEscapeKey = (callback) => {
   React.useEffect(() => {
     const handleEsc = (evt) => {
-      if (evt.code === "Enter") {
+      if (evt.code === "Escape") {
         callback();
       }
     };
