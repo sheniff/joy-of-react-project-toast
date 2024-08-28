@@ -3,29 +3,48 @@ import React from "react";
 import Button from "../Button";
 
 import styles from "./ToastPlayground.module.css";
+import Toast from "../Toast/Toast";
 
 const VARIANT_OPTIONS = ["notice", "warning", "success", "error"];
 
 function ToastPlayground() {
   const [message, setMessage] = React.useState("");
   const [variant, setVariant] = React.useState(VARIANT_OPTIONS[0]);
+  const [toasts, setToasts] = React.useState([]);
 
   const handleEmitToast = React.useCallback(
     (e) => {
       e.preventDefault();
-      alert(`[${variant}] ${message}`);
+      setToasts((current) => [
+        ...current,
+        { id: Math.random(), variant, message },
+      ]);
     },
     [variant, message]
   );
 
+  const handleDismissToast = (id) => {
+    setToasts((current) => current.filter((toast) => toast.id !== id));
+  };
+
   return (
-    <form className={styles.wrapper} onSubmit={handleEmitToast}>
+    <div className={styles.wrapper}>
       <header>
         <img alt="Cute toast mascot" src="/toast.png" />
         <h1>Toast Playground</h1>
       </header>
 
-      <div className={styles.controlsWrapper}>
+      {toasts.map(({ id, variant, message }) => (
+        <Toast
+          key={id}
+          variant={variant}
+          onDismiss={() => handleDismissToast(id)}
+        >
+          {message}
+        </Toast>
+      ))}
+
+      <form className={styles.controlsWrapper} onSubmit={handleEmitToast}>
         <div className={styles.row}>
           <label
             htmlFor="message"
@@ -69,8 +88,8 @@ function ToastPlayground() {
             <Button>Pop Toast!</Button>
           </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
   );
 }
 
