@@ -4,6 +4,7 @@ import Button from "../Button";
 
 import styles from "./ToastPlayground.module.css";
 import Toast from "../Toast/Toast";
+import ToastShelf from "../ToastShelf/ToastShelf";
 
 const VARIANT_OPTIONS = ["notice", "warning", "success", "error"];
 
@@ -19,6 +20,8 @@ function ToastPlayground() {
         ...current,
         { id: Math.random(), variant, message },
       ]);
+      setMessage("");
+      setVariant(VARIANT_OPTIONS[0]);
     },
     [variant, message]
   );
@@ -34,15 +37,7 @@ function ToastPlayground() {
         <h1>Toast Playground</h1>
       </header>
 
-      {toasts.map(({ id, variant, message }) => (
-        <Toast
-          key={id}
-          variant={variant}
-          onDismiss={() => handleDismissToast(id)}
-        >
-          {message}
-        </Toast>
-      ))}
+      <ToastShelf toasts={toasts} onDismiss={handleDismissToast} />
 
       <form className={styles.controlsWrapper} onSubmit={handleEmitToast}>
         <div className={styles.row}>
